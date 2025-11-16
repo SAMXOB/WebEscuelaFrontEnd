@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Frontend Angular - Clean Architecture
 
 Sistema de gestión moderno con Angular 17, arquitectura limpia y diseño responsive.
@@ -1232,3 +1233,7 @@ Este proyecto implementa un sistema de gestión moderno utilizando Angular 17 co
 ---
 
 **Desarrollado para el ITM - 2025**
+=======
+# WebEscuelaFrontEnd
+implementacion del front end al proyecto api escuela 
+>>>>>>> deab04863191ba337ca63b50ea42fc9213dc7044
