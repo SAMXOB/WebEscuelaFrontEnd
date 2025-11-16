@@ -1,0 +1,179 @@
+<div class="Estudiante-list">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title">Gestión de Estudiantes</h2>
+      <button class="btn btn-success" (click)="openCreateModal()">
+        Nuevo Estudiante
+      </button>
+    </div>
+    
+    <div class="card-body">
+      <!-- Filtros -->
+      <div class="filters mb-3">
+        <div class="row">
+          <div class="col-md-4">
+            <input 
+              type="text" 
+              class="form-control" 
+              placeholder="Buscar por nombre..."
+              [(ngModel)]="filters.nombre"
+              (input)="onFilterChange()"
+            >
+          </div>
+          <div class="col-md-3">
+            <select 
+              class="form-control" 
+              [(ngModel)]="filters.activa"
+              (change)="onFilterChange()"
+            >
+              <option value="">Todos los estados</option>
+              <option value="true">Activas</option>
+              <option value="false">Inactivas</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-secondary" (click)="clearFilters()">
+              Limpiar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla de Estudiantes -->
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="loading">
+              <td colspan="6" class="text-center">Cargando...</td>
+            </tr>
+            <tr *ngIf="!loading && Estudiante.length === 0">
+              <td colspan="6" class="text-center">No hay Estudiantes disponibles</td>
+            </tr>
+            <tr *ngFor="let Estudiante of Estudiante">
+              <td>{{ Estudiante.id }}</td>
+              <td>{{ Estudiante.nombre }}</td>
+              <td>{{ Estudiante.apellido }}</td>
+              <td>{{ Estudiante.email }}</td>
+              <td>
+                <button class="btn btn-sm btn-primary" (click)="editEstudiantes(Estudiante)">
+                  Editar
+                </button>
+                <button class="btn btn-sm btn-danger" (click)="deleteEstudiante(Estudiante)">
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Paginación -->
+      <div class="pagination mt-3" *ngIf="totalPages > 1">
+        <button 
+          class="btn btn-secondary" 
+          [disabled]="currentPage === 1"
+          (click)="goToPage(currentPage - 1)"
+        >
+          Anterior
+        </button>
+        <span class="mx-3">
+          Página {{ currentPage }} de {{ totalPages }}
+        </span>
+        <button 
+          class="btn btn-secondary" 
+          [disabled]="currentPage === totalPages"
+          (click)="goToPage(currentPage + 1)"
+        >
+          Siguiente
+        </button>
+      </div>
+    </div>
+  </div>
+
+ <!-- Modal para crear/editar Estudiante -->
+<div class="modal fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ editingEstudiante ? 'Editar Estudiante' : 'Nuevo Estudiante' }}</h5>
+        <button type="button" class="close" (click)="closeModal()">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="saveEstudiante()">
+          
+          <!-- Campo ID -->
+          <div class="form-group">
+            <label for="id">ID *</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              id="id" 
+              [(ngModel)]="EstudianteForm.id" 
+              name="id"
+              required
+              placeholder="Ingrese el ID del Estudiante"
+            >
+          </div>
+
+          <!-- Campo Nombre -->
+          <div class="form-group">
+            <label for="nombre">Nombre *</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="nombre" 
+              [(ngModel)]="EstudianteForm.nombre" 
+              name="nombre"
+              required
+              placeholder="Ingrese el nombre del Estudiante"
+            >
+          </div>
+
+          <!-- Campo Apellido -->
+          <div class="form-group">
+            <label for="apellido">Apellido</label>
+            <textarea 
+              class="form-control" 
+              id="apellido" 
+              [(ngModel)]="EstudianteForm.apellido" 
+              name="apellido"
+              rows="3"
+              placeholder="Ingrese un apellido (opcional)"
+            ></textarea>
+          </div>
+
+          <!-- Campo Email -->
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input 
+              type="email" 
+              class="form-control" 
+              id="email" 
+              [(ngModel)]="EstudianteForm.email" 
+              name="email"
+              required
+              placeholder="Ingrese el correo electrónico"
+            >
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="saveEstudiante()">
+          {{ editingEstudiante ? 'Actualizar' : 'Crear' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
